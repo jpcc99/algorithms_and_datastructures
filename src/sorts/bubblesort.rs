@@ -3,7 +3,10 @@ use super::Sorter;
 pub struct BubbleSort;
 
 impl Sorter for BubbleSort {
-    fn sort<T>(slice: &mut [T]) where T: Ord {
+    fn sort<T>(slice: &mut [T])
+    where
+        T: Ord,
+    {
         let mut swapped = true;
         while swapped {
             swapped = false;

@@ -5,7 +5,7 @@ pub struct QuickSort;
 impl Sorter for QuickSort {
     fn sort<T>(slice: &mut [T])
     where
-        T: Ord
+        T: Ord,
     {
         // [ unsorted | pivot | unsorted ]
         quicksort(slice);
@@ -15,7 +15,7 @@ impl Sorter for QuickSort {
 fn quicksort<T: Ord>(slice: &mut [T]) {
     if slice.is_empty() || slice.len() < 2 {
         return;
-    } else if slice.len() == 2 { 
+    } else if slice.len() == 2 {
         if slice[0] > slice[1] {
             slice.swap(0, 1);
         }

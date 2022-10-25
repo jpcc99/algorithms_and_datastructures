@@ -3,7 +3,10 @@ use super::Sorter;
 pub struct InsertionSort;
 
 impl Sorter for InsertionSort {
-    fn sort<T>(slice: &mut [T]) where T: Ord {
+    fn sort<T>(slice: &mut [T])
+    where
+        T: Ord,
+    {
         // [ sorted | not sorted ]
         let smart = false;
         for unsorted in 1..slice.len() {

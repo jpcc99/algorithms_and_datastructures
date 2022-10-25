@@ -1,14 +1,19 @@
+use std::fmt::Debug;
+
 use super::Sorter;
 
 pub struct MergeSort;
 
 impl Sorter for MergeSort {
-    fn sort<T>(slice: &mut [T]) where T: Ord {
+    fn sort<T>(slice: &mut [T])
+    where
+        T: Ord + Debug + Copy + Clone,
+    {
         mergesort(slice);
     }
 }
 
-fn mergesort<T: Ord>(slice: &mut [T]) {
+fn mergesort<T: Ord + Debug + Copy + Clone>(slice: &mut [T]) {
     if slice.is_empty() || slice.len() < 2 {
         return;
     } else if slice.len() == 2 && slice[0] > slice[1] {
@@ -19,15 +24,33 @@ fn mergesort<T: Ord>(slice: &mut [T]) {
     let (left, right) = slice.split_at_mut(middle);
     mergesort(left);
     mergesort(right);
-    for (i, v) in merge(left, right).iter().enumerate() {
-        if &i != v {
-            slice.swap(i, *v);
-        }
-    }
+    merge(slice);
 }
 
-fn merge<'a, T: Ord>(left: &'a mut [T], right: &'a mut [T]) -> Vec<usize> {
-    todo!();
+fn merge<'a, T: Ord + Debug + Copy + Clone>(slice: &mut [T]) {
+    let middle = slice.len() / 2;
+    let mut aux = Vec::<T>::new();
+    let (mut li, mut ri) = (0, middle);
+    while li < middle && ri < slice.len() {
+        if slice[li] <= slice[ri] {
+            aux.push(slice[li]);
+            li += 1;
+        } else {
+            aux.push(slice[ri]);
+            ri += 1;
+        }
+    }
+    while li < middle {
+        aux.push(slice[li]);
+        li += 1;
+    }
+    while ri < slice.len() {
+        aux.push(slice[ri]);
+        ri += 1;
+    }
+    for (i, v) in aux.iter().enumerate() {
+        slice[i] = *v;
+    }
 }
 
 #[test]

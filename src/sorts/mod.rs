@@ -1,30 +1,36 @@
+use std::fmt::Debug;
+
 pub trait Sorter {
-    fn sort<T>(slice: &mut [T]) where T: Ord;
+    fn sort<T>(slice: &mut [T])
+    where
+        T: Ord + Debug + Copy + Clone;
 }
 
-pub fn sort<T, S>(slice: &mut [T]) 
-    where
-    T: Ord,
+pub fn sort<T, S>(slice: &mut [T])
+where
+    T: Ord + Debug + Copy + Clone,
     S: Sorter,
 {
     S::sort(slice)
 }
 
 pub trait StdSorter {
-    fn sort<T>(slice: &mut [T]) where T: Ord + Copy + Clone;
+    fn sort<T>(slice: &mut [T])
+    where
+        T: Ord + Copy + Clone;
 }
 
 mod bubblesort;
 mod insertionsort;
-mod selectionsort;
-mod quicksort;
 mod mergesort;
+mod quicksort;
+mod selectionsort;
 
 pub use bubblesort::BubbleSort;
 pub use insertionsort::InsertionSort;
-pub use selectionsort::SelectionSort;
-pub use quicksort::QuickSort;
 pub use mergesort::MergeSort;
+pub use quicksort::QuickSort;
+pub use selectionsort::SelectionSort;
 
 #[cfg(test)]
 mod tests {
@@ -32,7 +38,10 @@ mod tests {
 
     struct StdSorter;
     impl Sorter for StdSorter {
-        fn sort<T>(slice: &mut [T]) where T: Ord {
+        fn sort<T>(slice: &mut [T])
+        where
+            T: Ord,
+        {
             slice.sort()
         }
     }
