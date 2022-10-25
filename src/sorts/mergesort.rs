@@ -24,29 +24,26 @@ fn mergesort<T: Ord + Debug + Copy + Clone>(slice: &mut [T]) {
     let (left, right) = slice.split_at_mut(middle);
     mergesort(left);
     mergesort(right);
-    merge(slice);
+    for (i, v) in merge(left, right).iter().enumerate() {
+        slice[i] = *v;
+    }
 }
 
-fn merge<'a, T: Ord + Debug + Copy + Clone>(slice: &mut [T]) {
-    let middle = slice.len() / 2;
-    let mut aux = Vec::<T>::new();
-    let (mut li, mut ri) = (0, middle);
-    while li < middle && ri < slice.len() {
-        if slice[li] <= slice[ri] {
-            aux.push(slice[li]);
-            li += 1;
+fn merge<'a, T: Ord + Debug + Copy + Clone>(left: &[T], right: &[T]) -> Vec<T> {
+    let mut aux = Vec::<T>::with_capacity(left.len() + right.len());
+    let (mut left, mut right) = (left.iter().peekable(), right.iter().peekable());
+    while let (Some(lv), Some(rv)) = (left.peek(), right.peek()) {
+        if lv <= rv {
+            left.next().take().map(|v| aux.push(*v));
         } else {
-            aux.push(slice[ri]);
-            ri += 1;
+            right.next().take().map(|v| aux.push(*v));
         }
     }
-    while li < middle {
-        aux.push(slice[li]);
-        li += 1;
+    for lv in left {
+        aux.push(*lv);
     }
-    while ri < slice.len() {
-        aux.push(slice[ri]);
-        ri += 1;
+    for rv in right {
+        aux.push(*rv);
     }
     for (i, v) in aux.iter().enumerate() {
         slice[i] = *v;
