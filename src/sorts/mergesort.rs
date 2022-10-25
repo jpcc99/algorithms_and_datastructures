@@ -45,15 +45,45 @@ fn merge<'a, T: Ord + Debug + Copy + Clone>(left: &[T], right: &[T]) -> Vec<T> {
     for rv in right {
         aux.push(*rv);
     }
-    for (i, v) in aux.iter().enumerate() {
-        slice[i] = *v;
-    }
+    aux
 }
 
 #[test]
-fn mergesort_works() {
-    let mut items = vec![0, 4, 2, 3, 81, 1, 7, 31];
-    println!("{:?}", items);
-    MergeSort::sort(&mut items);
-    assert_eq!(items, &[0, 1, 2, 3, 4, 7, 31, 81]);
+fn works_with_empty_values() {
+    let mut empty_vec = Vec::<i32>::new();
+    MergeSort::sort(&mut empty_vec);
+}
+
+#[test]
+fn works_with_same_values() {
+    let mut same_values = vec![1; 30];
+    MergeSort::sort(&mut same_values);
+    let mut is_sorted = true;
+    for i in 1..same_values.len() {
+        if same_values[i] < same_values[i - 1] {
+            is_sorted = false;
+            break;
+        }
+    }
+    assert!(is_sorted);
+}
+
+#[test]
+fn works_with_random_values() {
+    use rand::prelude::*;
+    const CAPACITY: usize = 100000;
+    let mut random_num = Vec::<i32>::with_capacity(CAPACITY);
+    let mut rng = rand::thread_rng();
+    let mut is_sorted = true;
+    for num in random_num.iter_mut() {
+        *num = rng.gen();
+    }
+    MergeSort::sort(&mut random_num);
+    for i in 1..random_num.len() {
+        if random_num[i] < random_num[i - 1] {
+            is_sorted = false;
+            break;
+        }
+    }
+    assert!(is_sorted);
 }

@@ -21,9 +21,41 @@ impl Sorter for BubbleSort {
 }
 
 #[test]
-fn bubble_sort_works() {
-    BubbleSort::sort::<i32>(&mut []); // test empty
-    let mut items = vec![4, 2, 3, 1, 5];
-    BubbleSort::sort(&mut items);
-    assert_eq!(items, &[1, 2, 3, 4, 5]);
+fn works_with_empty_values() {
+    let mut empty_vec = Vec::<i32>::new();
+    BubbleSort::sort(&mut empty_vec);
+}
+
+#[test]
+fn works_with_same_values() {
+    let mut same_values = vec![1; 30];
+    BubbleSort::sort(&mut same_values);
+    let mut is_sorted = true;
+    for i in 1..same_values.len() {
+        if same_values[i] < same_values[i - 1] {
+            is_sorted = false;
+            break;
+        }
+    }
+    assert!(is_sorted);
+}
+
+#[test]
+fn works_with_random_values() {
+    use rand::prelude::*;
+    const CAPACITY: usize = 100000;
+    let mut randon_num = Vec::<i32>::with_capacity(CAPACITY);
+    let mut rng = rand::thread_rng();
+    let mut is_sorted = true;
+    for num in randon_num.iter_mut() {
+        *num = rng.gen();
+    }
+    BubbleSort::sort(&mut randon_num);
+    for i in 1..randon_num.len() {
+        if randon_num[i] < randon_num[i - 1] {
+            is_sorted = false;
+            break;
+        }
+    }
+    assert!(is_sorted);
 }

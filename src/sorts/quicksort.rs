@@ -43,9 +43,41 @@ fn get_partition_point<T: Ord>(slice: &mut [T]) -> usize {
 }
 
 #[test]
-fn check_quiicksort() {
-    let mut items = vec![0, 4, 2, 3, 81, 1, 7, 31];
-    println!("{:?}", items);
-    QuickSort::sort(&mut items);
-    assert_eq!(items, &[0, 1, 2, 3, 4, 7, 31, 81]);
+fn works_with_empty_values() {
+    let mut empty_vec = Vec::<i32>::new();
+    QuickSort::sort(&mut empty_vec);
+}
+
+#[test]
+fn works_with_same_values() {
+    let mut same_values = vec![1; 30];
+    QuickSort::sort(&mut same_values);
+    let mut is_sorted = true;
+    for i in 1..same_values.len() {
+        if same_values[i] < same_values[i - 1] {
+            is_sorted = false;
+            break;
+        }
+    }
+    assert!(is_sorted);
+}
+
+#[test]
+fn works_with_random_values() {
+    use rand::prelude::*;
+    const CAPACITY: usize = 100000;
+    let mut randon_num = Vec::<i32>::with_capacity(CAPACITY);
+    let mut rng = rand::thread_rng();
+    let mut is_sorted = true;
+    for num in randon_num.iter_mut() {
+        *num = rng.gen();
+    }
+    QuickSort::sort(&mut randon_num);
+    for i in 1..randon_num.len() {
+        if randon_num[i] < randon_num[i - 1] {
+            is_sorted = false;
+            break;
+        }
+    }
+    assert!(is_sorted);
 }
